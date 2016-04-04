@@ -1,0 +1,127 @@
+Execute,StepNo,Command,TestName,TestItem
+,1,_InstantPudding_Start,,
+,2,_BarcodeScan[3][C][0][NO][Buffer_MLB#],_barcode_Scan,1
+,3,_Execute_SH_Script[/Users/rextec/Downloads/first.sh],terminal_Cmd,2
+,4,_RS232_Start[115200][None][8][1],,
+,5,_RS232_WriteCommand["happy"],write,3
+,6,RS232_Read["happy"][1],read,4
+,7,_RS232_WriteCommand[chinese],,
+,8,RS232_Read[chinese][1],read1,5
+,9,_AppendString["fuse-rev: 10\\nsecurity-domain: 1\\nio-leakage-bin-fuse: 59100\\nvdd-low-io-leakage-bin-fuse: 300"][""][Buffer_1],,
+,10,_RS232_WriteCommand["fuse-rev: 10\r\nsecurity-domain: 1\r\nio-leakage-bin-fuse: 59100\n\rvdd-low-io-leakage-bin-fuse: 300\n\rvdd-var-soc-io-leakage-b"],write,6
+,11,RS232_SearchKeyWord["io-leakage-bin-fuse:"][1][NO][0][1][Buffer_2],read4,7
+,12,_RS232_WriteCommand["new"],,
+,13,RS232_Read["new"][1],read2,8
+,14,_AppendString["Data = 0.18756 mA\nfixture_done"][""][Buffer_1],,
+,15,_Math[Buffer_1][And][0x80][integer(hex)][Buffer_2],rESULT,9
+,16,_RS232_WriteCommand["year"],,
+,17,RS232_Read["year"][1],read3,10
+,18,_RS232_Stop,,
+,19,_AppendString["stockholm --on\r\nOK\r\nstockholm"][""][Buffer_1],,
+,20,_SearchForString[Buffer_1]["OK"][0][-1],searchString,11
+,21,_StringBetweenKeywords[Buffer_1]["on"]["stockholm"][NO][Buffer_2],string_between,12
+,22,_MCU_Query["top_sys_fw_version"]["MCU_Version"][1][Buffer_2],Query,13
+,23,_MCU_SearchKeyWord["top_sys_fw_version"]["MCU_Version"][1][YES][21][1][Buffer_2],_MCU_SearchKeyWord,14
+,24,_StringBetweenKeywords[Buffer_2]["MCU_Version:"]["PCB_Version"][NO][Buffer_3],fw_version,15
+,25,_DisplayString[Buffer_2],DisplayString,16
+,26,_MCU_Query["top_sys_led_run_on"]["done"][1][Buffer_1],Query2,17
+,27,_AppendString[" 8.795026 "][""][Buffer_2],,
+,28,_CompareNumber[5.0][<=][Buffer_2][<=][10.0][][double][V],compare_Number,18
+,29,_ADC_Meas_eload_CH[V_set][Buffer_2],ADC_Meas_eload,19
+,,,,
+,,First Group,,
+,30,_Log10[10][Buffer_1],_log10,20
+,31,_Log10[27][Buffer_1],_log10_2,21
+,32,_Log10[75][Buffer_1],_log10_3,22
+,33,_IF[30][FAIL],,
+,34,_AppendString["12"][""][Buffer_1],,
+,35,_ln[Buffer_1][Buffer_2],ln,23
+,,,,
+,36,_ELSE,,
+,37,_AppendString["0A"][""][Buffer_1],,
+,38,_AppendString["7A"][""][Buffer_2],,
+,39,Pause,,
+,40,_Conta_Curr_Cal[Buffer_1][Buffer_2][1.372][Buffer_3],calculate,24
+,,,,
+,,,,
+,41,_DisplayString[Buffer_3],DisplayString,25
+,42,_ConvertIntegerToHex[9810][Buffer_2],IntToHex,26
+,43,_ConvertHexToASCII[68656C6C6F][Buffer_1],HexToASCII,27
+,44,_CRC16[64498E893E1800A45FAD0189783210BD][Buffer_2],_CRC16,28
+,45,_CRC16[64 49 8E 89 3E 18 00 A4 5F AD 01 89 78 32 10 BD 02 82 82 82 83 83 F4 1F 88][Buffer_2],_CRC16,29
+,46,_AppendString["64 49 8E 89 3E 18 00 A4 5F AD 01 89 78 32 10 BD 02 82 82 82 83 83 F4 1F 88 64 FD A7 50 DE 01 1D E0 5B 1D"][""][Buffer_2],,
+,47,_CRC16[Buffer_2][Buffer_3],_CRC16,30
+,48,_CRC16[64 49 8E 89 3E 18 00 A4 5F AD 01 89 78 32 10 BD 02 82 82 82 83 83 F4 1F 88 64 FD A7 50 DE 01 1D E0 5B 1D 96 62 33 E1 10 4D D1 17 64 BB 39 C8 1A FD 61 3F F0 DC 04 FF 05 FF 1B 07 00 51 49][Buffer_2],_CRC16,31
+,49,_AppendString["1894.41"][""][Buffer_5],,
+,50,_ConvertDoubleToHex[5.3][Buffer_1],DoubleToHex,32
+,51,_DisplayString[Buffer_1],DisplayString,33
+,52,_ConvertDoubleToHex[Buffer_5][Buffer_1],DoubleToHex,34
+,53,_ConvertDoubleToHex[83][Buffer_1],DoubleToHex,35
+,54,CheckSW_Version,sw_ver,36
+,55,ShowTimeAndDate[Buffer_1],time_date,37
+,56,_EndIF,,
+V,57,_OnOff_Vbatt[on],_OnOff_VBatt,38
+V,58,_Set_Vbatt[1000],_set_vbatt,39
+V,59,_OnOff_Vbatt[off],_OnOff_VBatt,40
+V,60,_GPIO_IBat[on],_gpio_ibat,41
+V,61,_Set_VUSB[3800],_set_vusb,42
+V,62,_OnOff_VUSB[on],_onOff_VUSB,43
+V,63,_Vbatt_Discharge[on],_vbatt_discharge,44
+V,64,_VUSB_Discharge[on],_vusb_discharge,45
+,65,_VUSB_From_CC[connect],_VUSB_Fr_CC,46
+V,66,_GPIO_IUSB[on],_gpio_iusb,47
+V,67,_DPDN1[to_mikeybus],_DPDN1,48
+V,68,_DPDN2[to_uart],_DPDN2,49
+V,69,_UART[to_soc],_UART,50
+,,,,
+V,70,_ACC[to_mikeybus],_ACC,51
+V,71,_ACC1[to_e75conn],_ACC1,52
+V,72,_ACC1_Eload[on],_ACC1_Eload,53
+V,73,_ACC2[to_appleid],_ACC2,54
+V,74,_ACC2_Eload[on],_ACC2_Eload,55
+V,75,_GPIO_IEload[on],_gpio_ieload,56
+,76,Pause,,
+V,77,_ORION_Eload[on],_ORION_Eload,57
+V,78,_PWR_OrionBD[on],_PWR_OrionBD,58
+V,79,_ORION_ExtPWR[on],_ORION_EXTPWR,59
+V,80,_ORION_COMM[enable],_ORION_COMM,60
+,81,_NTC[5k6],ntc_ctrl,61
+V,82,_SPKR[conn_spk_zero_vpp],_SPKR,62
+V,83,_GPIO[gpio_vol_up][off],gpio_ctrl,63
+,84,_ADC_Meas_BackLight[03][Buffer_7],_ADC_Meas_BackLight,64
+,85,_Meas_Freq[aop32k][4][Buffer_2],_Freq_Meas,65
+,86,_ADC_Meas_Volt[mBus_Ref_P][4][Buffer_16],_ADC_Meas_Volt,66
+,87,_ADC_Meas_PPLED_A[conn_to_meas][Buffer_1],_PPLED_A,67
+,88,_ADC_Meas_PPLED_A[disconn][Buffer_1],_PPLED_A,68
+,89,_ADC_Meas_PPLED_B[conn_to_meas][Buffer_2],_PPLED_B,69
+,90,_ADC_Meas_PPLED_B[disconn][Buffer_2],_PPLED_B,70
+,91,_ADC_Meas_PPLED_C[conn_to_meas][Buffer_3],_PPLED_C,71
+,92,_ADC_Meas_PPLED_C[disconn][Buffer_3],_PPLED_C,72
+,93,_Disconn_ADC,_Disconn_ADC,73
+,94,_ADC_Meas_Strobeled[WARM_LED2][Buffer_2],_Meas_StrobeLed,74
+,95,_Connect_CH_To_DMM[ACC_small_I-],_Connect_CH_DMM,75
+,96,_Connect_VBATT_Sense_To_DMM,Connect_VBatt_DMM,76
+,97,_Connect_VUSB_Sense_To_DMM,_Connect_VUSB_DMM,77
+,98,Connect_Slot_To_DMM[2][on],_Slot_To_DMM,78
+,99,_Disconnect_DMM,Disconnect_DMM,79
+,100,_DMM_Meas_Volt[ACCPWR_M][10][0.0001][0.005][0.1][Buffer_3],_DMM_Meas_Volt,80
+,101,_DMM_Meas_VBATT_Sense[10][0.0001][0.005][1][Buffer_2],_DMM_Meas_VBATT,81
+,102,_DMM_Meas_VUSB_Sense[MAX][DEF][0.005][0.1][Buffer_7],_DMM_Meas_VUSB,82
+,103,_ADC_Meas_IBat[5x][Buffer_2],_ADC_Meas_IBat,83
+,104,_ADC_Meas_IUSB[10x][Buffer_9],_ADC_Meas_IUSB,84
+,105,_ADC_Meas_IEload[50x][Buffer_10],_ADC_Meas_IEload,85
+,106,_Contamination_Off,_Off_Conta,86
+V,107,_Contamination[pwr_data][5k],_Contamination,87
+,108,_Meas_ADC[ain1][Buffer_4],_Meas_ADC,88
+,109,_I2C0_Write[8bit][0A]["xxxxxxxx"],_I2C0_Write,89
+,110,_I2C0_Read[8bit][0A][Buffer_3],_I2C0_Read,90
+,111,_I2C1_Write_8bit[7C][Buffer_3],_I2C1_Write,91
+,112,_I2C1_Read_8bit[7C][Buffer_19],_I2C1_Read,92
+,113,_Set_VUSB_Step[5000][10000],_VUSB_Sweeping,93
+,114,_ORION_GPIO[2][on],_ORION_GPIO,94
+,115,_Set_Eload_Current["0B"],_Set_Eload_Curr,95
+,116,_Eload_Set_Ohm[],,
+,117,_Eload_Set_Current[][],,
+,118,_Terminal_Cmd_Individual["/users/gdlocal/mobeil_restore -l "][USB_LOCATION_PLIST]["-D LL 'factory -DFU' jhjg"][][][],_Terminal_Cmd_Individual,96
+,,Last Group,,
+,119,ShowTimeAndDate[Buffer_1],showTime,97
